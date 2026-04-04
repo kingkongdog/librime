@@ -191,6 +191,10 @@ an<Candidate> CacheTranslation::Peek() {
 DistinctTranslation::DistinctTranslation(an<Translation> translation)
     : CacheTranslation(translation) {}
 
+inline std::string TextComment(an<Candidate> cand) {
+  return cand->text() + '\0' + cand->comment();
+}
+
 bool DistinctTranslation::Next() {
   if (exhausted())
     return false;
@@ -200,10 +204,6 @@ bool DistinctTranslation::Next() {
   } while (!exhausted() &&
            AlreadyHas(TextComment(Peek())));  // skip duplicate candidates
   return true;
-}
-
-inline std::string TextComment(an<Candidate> cand) {
-  return cand->text() + '\0' + cand->comment();
 }
 
 bool DistinctTranslation::AlreadyHas(const string& text) const {
