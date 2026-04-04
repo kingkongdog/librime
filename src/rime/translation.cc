@@ -194,12 +194,16 @@ DistinctTranslation::DistinctTranslation(an<Translation> translation)
 bool DistinctTranslation::Next() {
   if (exhausted())
     return false;
-  candidate_set_.insert(Peek()->text());
+  candidate_set_.insert(TextComment(Peek()));
   do {
     CacheTranslation::Next();
   } while (!exhausted() &&
-           AlreadyHas(Peek()->text()));  // skip duplicate candidates
+           AlreadyHas(TextComment(Peek())));  // skip duplicate candidates
   return true;
+}
+
+inline std::string TextComment(an<Candidate> cand) {
+  return cand->text() + '\0' + cand->comment();
 }
 
 bool DistinctTranslation::AlreadyHas(const string& text) const {
