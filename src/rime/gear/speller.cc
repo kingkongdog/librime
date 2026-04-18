@@ -113,6 +113,10 @@ ProcessResult Speller::ProcessKeyEvent(const KeyEvent& key_event) {
   if (!is_initial && expecting_an_initial(ctx, alphabet_, finals_)) {
     return kNoop;
   }
+  // When there are candidates, let selector handle digit keys for selection
+  if (ch >= '1' && ch <= '9' && ctx->HasMenu()) {
+    return kNoop;
+  }
   // handles input beyond max_code_length when auto_select is false.
   if (is_initial && AutoSelectAtMaxCodeLength(ctx)) {
     DLOG(INFO) << "auto-select at max code length.";
