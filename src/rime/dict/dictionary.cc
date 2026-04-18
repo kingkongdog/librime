@@ -302,6 +302,12 @@ size_t Dictionary::LookupWords(DictEntryIterator* result,
                                size_t expand_search_limit,
                                const hash_set<string>* blacklist) {
   DLOG(INFO) << "lookup: " << str_code;
+  // 背景：给九键增加了[01]声调和首字母筛选，发现有些拼音后跟 1 时，候选列表就空了，比如 a1, aa1, ba1 等。
+  // 解决方案：
+  // 1. 把 01 加入 speller/delimiter。然后新问题是，直接按 1，trime 卡死。使用 android studio 调试，log 不停打印 "creating temporary dict entry"
+  // 2. copilot 帮忙定位到这里，增加判空就 ok 了。哈哈哈哈。（实际上 copilot 的建议是判断 == "1" return，我发现没有效果，改成判空就解决了。）
+  if (str_code.empty())
+    return 0;
   if (!loaded())
     return 0;
   vector<Prism::Match> keys;
