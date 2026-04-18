@@ -302,8 +302,6 @@ size_t Dictionary::LookupWords(DictEntryIterator* result,
                                size_t expand_search_limit,
                                const hash_set<string>* blacklist) {
   DLOG(INFO) << "lookup: " << str_code;
-  if (str_code == "1")
-    return 0;
   if (!loaded())
     return 0;
   vector<Prism::Match> keys;
