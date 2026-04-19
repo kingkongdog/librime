@@ -43,10 +43,6 @@ bool AbcSegmentor::Proceed(Segmentation* segmentation) {
   size_t k = j;
   bool expecting_an_initial = true;
   for (; k < input.length(); ++k) {
-    if (k + 1 < input.length() && (input[k + 1] == '0' || input[k + 1] == '1')) {
-      break;
-    }
-
     bool is_letter = alphabet_.find(input[k]) != string::npos;
     bool is_delimiter = (k != j) && (delimiter_.find(input[k]) != string::npos);
     if (!is_letter && !is_delimiter)
