@@ -210,11 +210,12 @@ void ConcreteEngine::TranslateSegments(Segmentation* segments) {
     size_t len = segment.end - segment.start;
     string input = segments->input().substr(segment.start, len);
 
-    size_t tone_delimiter_pos = input.find_first_of("10");
-    if (tone_delimiter_pos != string::npos) {
-      input = input.substr(0, tone_delimiter_pos);
-      if (input.empty()) {
-        return;
+    // [01]声调首字母筛选会和前面的数字一起编入一个 segment。translate 之前要裁切掉。
+    // 试过把 [01]声调首字母 单独作为一个 segment，会导致不出候选词。
+    if (segment.HasTag("abc")) {
+      size_t tone_delimiter_pos = input.find_first_of("10");
+      if (tone_delimiter_pos != string::npos && tone_delimiter_pos != 0) {
+        input = input.substr(0, tone_delimiter_pos);
       }
     }
 
