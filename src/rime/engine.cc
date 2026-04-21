@@ -213,6 +213,9 @@ void ConcreteEngine::TranslateSegments(Segmentation* segments) {
     size_t tone_delimiter_pos = input.find_first_of("10");
     if (tone_delimiter_pos != string::npos) {
       input = input.substr(0, tone_delimiter_pos);
+      if (input.empty()) {
+        return;
+      }
     }
 
     DLOG(INFO) << "translating segment: [" << input << "]";
